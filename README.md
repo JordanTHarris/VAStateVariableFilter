@@ -1,4 +1,12 @@
 # VAStateVariableFilter
+
+#### Analog Circuit Diagram
+![Analog Diagram](https://cloud.githubusercontent.com/assets/11206202/7587209/aa5c434a-f882-11e4-9e90-2220cf9cf514.png)
+
+#### Digital TPT Version Block Diagram
+![Digital Diagram](https://cloud.githubusercontent.com/assets/11206202/7587264/efe8f322-f882-11e4-80bf-68c6b6fda8f1.png)
+------
+
 Virtual analog (VA) State Variable Filter (SVF) that has 8 different types of filter outputs.
 
 This is a plugin made with the JUCE framework, used for creating and testing the State Variable Filter design.
