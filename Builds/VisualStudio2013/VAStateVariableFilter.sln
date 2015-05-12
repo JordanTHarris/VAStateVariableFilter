@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2013
+Project("{53D6A39D-CCBA-3308-D7FB-36E39C081056}") = "VAStateVariableFilter", "VAStateVariableFilter.vcxproj", "{ADBDF229-68E8-A764-9DCD-AAB5BE848411}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADBDF229-68E8-A764-9DCD-AAB5BE848411}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ADBDF229-68E8-A764-9DCD-AAB5BE848411}.Debug|Win32.Build.0 = Debug|Win32
+		{ADBDF229-68E8-A764-9DCD-AAB5BE848411}.Release|Win32.ActiveCfg = Release|Win32
+		{ADBDF229-68E8-A764-9DCD-AAB5BE848411}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
