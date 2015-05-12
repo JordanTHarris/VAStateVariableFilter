@@ -107,12 +107,8 @@ void VAStateVariableFilterProcessor::processBlock (AudioSampleBuffer& buffer, Mi
 
 		float* channelData = buffer.getWritePointer (channel);
 
-		for (int i = 0; i < numSamples; ++i) {
-			const float input = channelData[i];
-
-			// Process the audio buffer through the VAStateVariableFilter
-			channelData[i] = svfFilter.processChannel(input, channel);
-		}
+		// Process audio sample block through filter
+		svfFilter.processAudioBlock(channelData, numSamples, channel);
 	}
 
 	// In case we have more outputs than inputs, this code clears any output

@@ -41,10 +41,10 @@ using std::pow;
 using std::tan;
 using std::sqrt;
 
+
 //==============================================================================
 
-
-//	The type of filter that the State Variable Filter will output. 
+/** The type of filter that the State Variable Filter will output. */
 
 enum SVFType {
 	SVFLowpass = 0,
@@ -60,26 +60,25 @@ enum SVFType {
 //==============================================================================
 class VAStateVariableFilter {
 public:
-	// Create and initialize the filter with default values defined in constructor.
+	/** Create and initialize the filter with default values defined in constructor. */
 	VAStateVariableFilter();
 
-	/**
-		Initialize the filter with specific (static) parameters. Useful for
+	/**	Initialize the filter with specific (static) parameters. Useful for
 		using as a static filter; not modulating parameters.
 		Note: shelfGain should only be used if type is SVFBandShelving
 	*/
 	VAStateVariableFilter(const int& type, const float& cutoff, const float& resonance,
 						  const float& shelfGain);
 
-	//--------------------------------------------------------------------------
+	//------------------------------------------------------------------------------
 
 	~VAStateVariableFilter();
 	
-	//--------------------------------------------------------------------------
-	/**
-		Sets the type of the filter that processChannel() will output. This filter 
-		can choose between 8 different types using the enums listed below or the 
-		int given to each.
+	//------------------------------------------------------------------------------
+	
+	/**	Sets the type of the filter that processAudioSample() or processAudioBlock() will 
+		output. This filter can choose between 8 different types using the enums listed 
+		below or the int given to each.
 		0: SVFLowpass
 		1: SVFBandpass
 		2: SVFHighpass
@@ -91,60 +90,75 @@ public:
 	*/
 	void setFilterType(const int& newType);
 
-	//--------------------------------------------------------------------------
-	/**	
-		Used for changing the filter's cutoff parameter logarithmically by 
+	//------------------------------------------------------------------------------
+	/**	Used for changing the filter's cutoff parameter logarithmically by 
 		pitch (MIDI note #)
 	*/
 	void setCutoffPitch(const float& newCutoff);
 
-	//--------------------------------------------------------------------------
-	//	Used for changing the filter's cutoff parameter linearly by frequency (Hz)
+	//------------------------------------------------------------------------------
+	/**	Used for changing the filter's cutoff parameter linearly by frequency (Hz) */
 	void setCutoffFreq(const float& newCutoff);
 
-	//--------------------------------------------------------------------------
-	/**
-		Used for setting the resonance amount. This is then converted to a Q
+	//------------------------------------------------------------------------------
+	/** Used for setting the resonance amount. This is then converted to a Q
 		value, which is used by the filter.
 		Range: (0-1)
 	*/
 	void setResonance(const float& newResonance);
 
-	//--------------------------------------------------------------------------
-	/**
-		Used for setting the filter's Q amount. This is then converted to a 
+	//------------------------------------------------------------------------------
+	/** Used for setting the filter's Q amount. This is then converted to a
 		damping parameter called R, which is used in the original filter.
 	*/
 	void setQ(const float& newQ);
 
-	//--------------------------------------------------------------------------
-	//	Sets the gain of the shelf for the BandShelving filter only.
+	//------------------------------------------------------------------------------
+	/**	Sets the gain of the shelf for the BandShelving filter only. */
 	void setShelfGain(const float& newGain);
 
-	//--------------------------------------------------------------------------
-	//	Statically set the filters parameters.
+	//------------------------------------------------------------------------------
+	/**	Statically set the filters parameters. */
 	void setFilter(const int& newType, const float& newCutoff, 
 				   const float& newResonance, const float& newShelfGain);
 
-	//--------------------------------------------------------------------------
-	/**	
-		Set the sample rate used by the host. Needs to be used to accurately
+	//------------------------------------------------------------------------------	
+	/**	Set the sample rate used by the host. Needs to be used to accurately
 		calculate the coefficients of the filter from the cutoff.
 		Note: This is often used in AudioProcessor::prepareToPlay
 	*/
 	void setSampleRate(const float& newSampleRate);
 
-	//--------------------------------------------------------------------------
-	/**	
-		Performs the actual processing for one sample of data, on 2 channels.
+	//------------------------------------------------------------------------------
+	/** Set's whether the filter will process data or not.
+		- If (isActive = true) then the filter will process data
+		- If (isActive = false) then the filter will be bypassed
+	*/
+	void setIsActive(bool isActive);
+
+	//------------------------------------------------------------------------------
+	/**	Performs the actual processing for one sample of data, on 2 channels.
 		If 2 channels are needed (stereo), use channel index (channelIdx) to 
 		specify which channel is being processed (i.e. 0 for left, 1 for right).
 	*/
-	float processChannel(const float& input, const int& channelIndex);
+	float processAudioSample(const float& input, const int& channelIndex);
 
-	//--------------------------------------------------------------------------
+	//------------------------------------------------------------------------------	
+	/**	Performs the actual processing for a block of samples, on 2 channels.
+		If 2 channels are needed (stereo), use channel index (channelIdx) to 
+		specify which channel is being processed (i.e. 0 for left, 1 for right).
+		Note:
+		This processes the information sent to the samples argument and 
+		does it through a pointer. Therefore, no value needs to be
+		returned.
+	*/
+	void processAudioBlock(float* const samples, const int& numSamples,
+						   const int& channelIndex);
+
+	//------------------------------------------------------------------------------
 
 protected:
+	//==============================================================================
 	//	Calculate the coefficients for the filter based on parameters.
 	void calcFilter(void);
 
@@ -155,6 +169,7 @@ protected:
 	float shelfGain;
 
 	float sampleRate;
+	bool active;		// is the filter processing or not
 
 	//	Coefficients
 	float gCoeff;		// gain element 

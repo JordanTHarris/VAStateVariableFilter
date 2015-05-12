@@ -39,32 +39,42 @@ void VAStateVariableFilter::setFilterType(const int& newType)
 
 void VAStateVariableFilter::setCutoffPitch(const float& newCutoffPitch)
 {
-	cutoffFreq = pitchToFreq(newCutoffPitch);
-	calcFilter();
+	if (active) {
+		cutoffFreq = pitchToFreq(newCutoffPitch);
+		calcFilter();
+	}
 }
 
 void VAStateVariableFilter::setCutoffFreq(const float& newCutoffFreq)
 {
-	cutoffFreq = newCutoffFreq;
-	calcFilter();
+	if (active) {
+		cutoffFreq = newCutoffFreq;
+		calcFilter();
+	}
 }
 
 void VAStateVariableFilter::setResonance(const float& newResonance)
 {
-	Q = resonanceToQ(newResonance);
-	calcFilter();
+	if (active) {
+		Q = resonanceToQ(newResonance);
+		calcFilter();
+	}
 }
 
 void VAStateVariableFilter::setQ(const float& newQ)
 {
-	Q = newQ;
-	calcFilter();
+	if (active) {
+		Q = newQ;
+		calcFilter();
+	}
 }
 
 void VAStateVariableFilter::setShelfGain(const float& newGain)
 {
-	shelfGain = newGain;
-	calcFilter();
+	if (active) {
+		shelfGain = newGain;
+		calcFilter();
+	}
 }
 
 void VAStateVariableFilter::setFilter(const int& newType, const float& newCutoffFreq,
@@ -82,81 +92,168 @@ void VAStateVariableFilter::setSampleRate(const float& newSampleRate)
 	calcFilter();
 }
 
+void VAStateVariableFilter::setIsActive(bool isActive)
+{
+	active = isActive;
+}
+
 //==============================================================================
 void VAStateVariableFilter::calcFilter(void)
 {
-	// prewarp the cutoff (for bilinear-transform filters)
-	float wd = cutoffFreq * 2.0f * M_PI;
-	float T = 1.0f / (float)sampleRate;
-	float wa = (2.0f / T) * tan(wd * T / 2.0f);
+	if (active) {
 
-	gCoeff = wa * T / 2.0f;			// Calculate g (gain element of integrator)
+		// prewarp the cutoff (for bilinear-transform filters)
+		float wd = cutoffFreq * 2.0f * M_PI;
+		float T = 1.0f / (float)sampleRate;
+		float wa = (2.0f / T) * tan(wd * T / 2.0f);
 
-	RCoeff = 1.0f / (2.0f * Q);		// Calculate Zavalishin's R from Q
-									// R is referred to as the damping parameter
+		gCoeff = wa * T / 2.0f;			// Calculate g (gain element of integrator)
 
-	KCoeff = shelfGain;				// Gain for BandShelving filter
+		RCoeff = 1.0f / (2.0f * Q);		// Calculate Zavalishin's R from Q
+		// R is referred to as the damping parameter
+
+		KCoeff = shelfGain;				// Gain for BandShelving filter
+	}
 }
 
-float VAStateVariableFilter::processChannel(const float& input, const int& channelIndex)
+float VAStateVariableFilter::processAudioSample(const float& input, const int& channelIndex)
 {
-	float HP = 0.0f;
-	HP = (input - (2.0f * RCoeff + gCoeff) * z1_A[channelIndex] - z2_A[channelIndex])
-		/ (1.0f + (2.0f * RCoeff * gCoeff) + gCoeff * gCoeff);
+	if (active) {
 
-	float BP = 0.0f;
-	BP = HP * gCoeff + z1_A[channelIndex];
+		float HP = 0.0f;
+		HP = (input - (2.0f * RCoeff + gCoeff) * z1_A[channelIndex] - z2_A[channelIndex])
+			/ (1.0f + (2.0f * RCoeff * gCoeff) + gCoeff * gCoeff);
 
-	float LP = 0.0f;
-	LP = BP * gCoeff + z2_A[channelIndex];
+		float BP = 0.0f;
+		BP = HP * gCoeff + z1_A[channelIndex];
 
-	float UBP = 0.0f;
-	UBP = 2.0f * RCoeff * BP;
+		float LP = 0.0f;
+		LP = BP * gCoeff + z2_A[channelIndex];
 
-	float BShelf = 0.0f;
-	BShelf = input + UBP * KCoeff;
+		float UBP = 0.0f;
+		UBP = 2.0f * RCoeff * BP;
 
-	float Notch = 0.0f;
-	Notch = input - UBP;
+		float BShelf = 0.0f;
+		BShelf = input + UBP * KCoeff;
 
-	float AP = 0.0f;
-	AP = input - (4.0f * RCoeff * BP);
+		float Notch = 0.0f;
+		Notch = input - UBP;
 
-	float Peak = 0.0f;
-	Peak = LP - HP;
+		float AP = 0.0f;
+		AP = input - (4.0f * RCoeff * BP);
 
-	z1_A[channelIndex] = gCoeff * HP + BP;		// unit delay (state variable)
-	z2_A[channelIndex] = gCoeff * BP + LP;		// unit delay (state variable)
+		float Peak = 0.0f;
+		Peak = LP - HP;
 
-	// Selects which filter type this function will output.
-	switch (filterType) {
-	case SVFLowpass:
-		return LP;
-		break;
-	case SVFBandpass:
-		return BP;
-		break;
-	case SVFHighpass:
-		return HP;
-		break;
-	case SVFUnitGainBandpass:
-		return UBP;
-		break;
-	case SVFBandShelving:
-		return BShelf;
-		break;
-	case SVFNotch:
-		return Notch;
-		break;
-	case SVFAllpass:
-		return AP;
-		break;
-	case SVFPeak:
-		return Peak;
-		break;
-	default:
-		return 0.0f;
-		break;
+		z1_A[channelIndex] = gCoeff * HP + BP;		// unit delay (state variable)
+		z2_A[channelIndex] = gCoeff * BP + LP;		// unit delay (state variable)
+
+		// Selects which filter type this function will output.
+		switch (filterType) {
+		case SVFLowpass:
+			return LP;
+			break;
+		case SVFBandpass:
+			return BP;
+			break;
+		case SVFHighpass:
+			return HP;
+			break;
+		case SVFUnitGainBandpass:
+			return UBP;
+			break;
+		case SVFBandShelving:
+			return BShelf;
+			break;
+		case SVFNotch:
+			return Notch;
+			break;
+		case SVFAllpass:
+			return AP;
+			break;
+		case SVFPeak:
+			return Peak;
+			break;
+		default:
+			return 0.0f;
+			break;
+		}
+	}
+	else {	// If note active, return input
+		return input;
+	}
+}
+
+void VAStateVariableFilter::processAudioBlock(float* const samples,  const int& numSamples, 
+											  const int& channelIndex)
+{
+	// Test if filter is active. If not, bypass it
+	if (active) {
+
+		// Loop through the sample block and process it
+		for (int i = 0; i < numSamples; ++i) {
+
+			const float input = samples[i];
+
+			float HP = 0.0f;
+			HP = (input - (2.0f * RCoeff + gCoeff) * z1_A[channelIndex] - z2_A[channelIndex])
+				/ (1.0f + (2.0f * RCoeff * gCoeff) + gCoeff * gCoeff);
+
+			float BP = 0.0f;
+			BP = HP * gCoeff + z1_A[channelIndex];
+
+			float LP = 0.0f;
+			LP = BP * gCoeff + z2_A[channelIndex];
+
+			float UBP = 0.0f;
+			UBP = 2.0f * RCoeff * BP;
+
+			float BShelf = 0.0f;
+			BShelf = input + UBP * KCoeff;
+
+			float Notch = 0.0f;
+			Notch = input - UBP;
+
+			float AP = 0.0f;
+			AP = input - (4.0f * RCoeff * BP);
+
+			float Peak = 0.0f;
+			Peak = LP - HP;
+
+			z1_A[channelIndex] = gCoeff * HP + BP;		// unit delay (state variable)
+			z2_A[channelIndex] = gCoeff * BP + LP;		// unit delay (state variable)
+
+			// Selects which filter type this function will output.
+			switch (filterType) {
+			case SVFLowpass:
+				samples[i] = LP;
+				break;
+			case SVFBandpass:
+				samples[i] = BP;
+				break;
+			case SVFHighpass:
+				samples[i] = HP;
+				break;
+			case SVFUnitGainBandpass:
+				samples[i] = UBP;
+				break;
+			case SVFBandShelving:
+				samples[i] = BShelf;
+				break;
+			case SVFNotch:
+				samples[i] = Notch;
+				break;
+			case SVFAllpass:
+				samples[i] = AP;
+				break;
+			case SVFPeak:
+				samples[i] = Peak;
+				break;
+			default:
+				samples[i] = 0.0f;
+				break;
+			}
+		}
 	}
 }
 
