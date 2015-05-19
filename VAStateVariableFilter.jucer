@@ -52,6 +52,8 @@
               file="Source/Parameters/ResonanceParam.h"/>
       </GROUP>
       <GROUP id="{D6D35ECB-E75D-826D-4F82-36F563AC1C68}" name="Utilities">
+        <FILE id="Ufkoiu" name="ParameterSmoother.h" compile="0" resource="0"
+              file="Source/Utilities/ParameterSmoother.h"/>
         <FILE id="xa4EZj" name="DspUtilities.h" compile="0" resource="0" file="Source/Utilities/DspUtilities.h"/>
       </GROUP>
     </GROUP>

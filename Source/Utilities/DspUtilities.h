@@ -1,6 +1,16 @@
 /*
-*	Useful DSP utilities. For instance, calculating frequency from a given 
-*	pitch (MIDI) value, or vice versa.
+==============================================================================
+
+ParameterSmoother.h
+Created: 1 May 2015 12:43:46am
+Author:  Jordan Harris
+
+==============================================================================
+*/
+
+/*
+	Useful DSP utilities. For instance, calculating frequency from a given 
+	pitch (MIDI) value, or vice versa.
 */
 
 //==============================================================================
@@ -39,6 +49,21 @@ double clipMinMax(double in, double minValue, double maxValue)
 		return minValue;
 	else if (in > maxValue)
 		return maxValue;
+	else
+		return in;
+}
+
+//==============================================================================
+
+/** 
+	Takes a value as input and clips it according to the min value.
+	Returns the input if (minValue <= in). 
+	If (in < minValue), then return minValue.
+*/
+double clipMin(double in, double minValue)
+{
+	if (in < minValue)
+		return minValue;
 	else
 		return in;
 }

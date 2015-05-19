@@ -1238,6 +1238,7 @@
     <ClInclude Include="..\..\Source\Parameters\FloatParameter.h"/>
     <ClInclude Include="..\..\Source\Parameters\ShelfGainParam.h"/>
     <ClInclude Include="..\..\Source\Parameters\ResonanceParam.h"/>
+    <ClInclude Include="..\..\Source\Utilities\ParameterSmoother.h"/>
     <ClInclude Include="..\..\Source\Utilities\DspUtilities.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_audio_basics\buffers\juce_AudioSampleBuffer.h"/>

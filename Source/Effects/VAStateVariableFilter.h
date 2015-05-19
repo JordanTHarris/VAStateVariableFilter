@@ -33,19 +33,22 @@
 
 #define _USE_MATH_DEFINES		// to use M_PI
 
+//==============================================================================
+
 #include <cmath>
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../Utilities/DspUtilities.h"
+#include "../Utilities/ParameterSmoother.h"
+
+//==============================================================================
 
 using std::pow;
 using std::tan;
 using std::sqrt;
 
-
 //==============================================================================
 
 /** The type of filter that the State Variable Filter will output. */
-
 enum SVFType {
 	SVFLowpass = 0,
 	SVFBandpass,
@@ -160,7 +163,7 @@ public:
 protected:
 	//==============================================================================
 	//	Calculate the coefficients for the filter based on parameters.
-	void calcFilter(void);
+	void calcFilter();
 
 	//	Parameters
 	int filterType;
@@ -169,7 +172,7 @@ protected:
 	float shelfGain;
 
 	float sampleRate;
-	bool active;		// is the filter processing or not
+	bool active = true;	// is the filter processing or not
 
 	//	Coefficients
 	float gCoeff;		// gain element 
@@ -177,6 +180,8 @@ protected:
 	float KCoeff;		// shelf gain element
 
 	float z1_A[2], z2_A[2];		// state variables (z^-1)
+
+	ParameterSmoother cutoffSmoother;
 };
 
 //==============================================================================

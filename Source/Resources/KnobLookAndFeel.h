@@ -3,7 +3,7 @@
 
 	KnobLookAndFeel.h
 	Created: 26 Apr 2015 6:18:25am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */

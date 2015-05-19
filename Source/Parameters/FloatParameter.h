@@ -3,7 +3,7 @@
 
 	FloatParameter.h
 	Created: 2 May 2015 4:07:55am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -13,6 +13,8 @@
 
 #ifndef FLOATPARAMETER_H_INCLUDED
 #define FLOATPARAMETER_H_INCLUDED
+
+//==============================================================================
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 

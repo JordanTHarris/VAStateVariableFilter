@@ -1554,6 +1554,9 @@
     <ClInclude Include="..\..\Source\Parameters\ResonanceParam.h">
       <Filter>VAStateVariableFilter\Source\Parameters</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Utilities\ParameterSmoother.h">
+      <Filter>VAStateVariableFilter\Source\Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\DspUtilities.h">
       <Filter>VAStateVariableFilter\Source\Utilities</Filter>
     </ClInclude>

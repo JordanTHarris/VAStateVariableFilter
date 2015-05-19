@@ -3,13 +3,15 @@
 
 	CutoffPitchParam.h
 	Created: 11 May 2015 10:54:56am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */
 
 #ifndef CUTOFFPITCHPARAM_H_INCLUDED
 #define CUTOFFPITCHPARAM_H_INCLUDED
+
+//==============================================================================
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "FloatParameter.h"

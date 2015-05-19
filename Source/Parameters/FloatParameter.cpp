@@ -3,13 +3,15 @@
 
 	FloatParameter.cpp
 	Created: 2 May 2015 4:07:55am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */
 
 // This class is used to handle parameter information passed to and from the
 // plugin's host. This particular class handles float parameters (32 bit).
+
+//==============================================================================
 
 #include "FloatParameter.h"
 

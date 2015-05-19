@@ -10,6 +10,8 @@
 
 #include "VAStateVariableFilter.h"
 
+//==============================================================================
+
 VAStateVariableFilter::VAStateVariableFilter()
 {
 	sampleRate = 44100.0f;				// default sample rate when constructed
@@ -23,7 +25,9 @@ VAStateVariableFilter::VAStateVariableFilter()
 	Q = resonanceToQ(0.5);
 
 	z1_A[0] = z2_A[0] = 0.0f;
-	z1_A[1] = z2_A[0] = 0.0f;
+	z1_A[1] = z2_A[1] = 0.0f;
+
+	cutoffSmoother.setTimeMs(30);
 }
 
 VAStateVariableFilter::~VAStateVariableFilter()
@@ -41,6 +45,7 @@ void VAStateVariableFilter::setCutoffPitch(const float& newCutoffPitch)
 {
 	if (active) {
 		cutoffFreq = pitchToFreq(newCutoffPitch);
+		cutoffSmoother.setValue(cutoffFreq);
 		calcFilter();
 	}
 }
@@ -89,6 +94,7 @@ void VAStateVariableFilter::setFilter(const int& newType, const float& newCutoff
 void VAStateVariableFilter::setSampleRate(const float& newSampleRate)
 {
 	sampleRate = newSampleRate;
+	cutoffSmoother.setSampleRate(sampleRate);
 	calcFilter();
 }
 
@@ -98,7 +104,7 @@ void VAStateVariableFilter::setIsActive(bool isActive)
 }
 
 //==============================================================================
-void VAStateVariableFilter::calcFilter(void)
+void VAStateVariableFilter::calcFilter()
 {
 	if (active) {
 
@@ -179,7 +185,7 @@ float VAStateVariableFilter::processAudioSample(const float& input, const int& c
 			break;
 		}
 	}
-	else {	// If note active, return input
+	else {	// If not active, return input
 		return input;
 	}
 }
@@ -192,7 +198,13 @@ void VAStateVariableFilter::processAudioBlock(float* const samples,  const int& 
 
 		// Loop through the sample block and process it
 		for (int i = 0; i < numSamples; ++i) {
-
+			
+			// Do the cutoff parameter smoothing.
+			if (cutoffSmoother.shouldUpdate()) {
+				cutoffSmoother.processSmoother(cutoffFreq);
+				calcFilter();
+			}
+			
 			const float input = samples[i];
 
 			float HP = 0.0f;

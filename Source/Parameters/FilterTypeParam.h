@@ -3,13 +3,15 @@
 
 	FilterTypeParam.h
 	Created: 11 May 2015 11:17:15am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */
 
 #ifndef FILTERTYPEPARAM_H_INCLUDED
 #define FILTERTYPEPARAM_H_INCLUDED
+
+//==============================================================================
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "FloatParameter.h"

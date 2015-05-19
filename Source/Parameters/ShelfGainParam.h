@@ -3,7 +3,7 @@
 
 	ShelfGainParam.h
 	Created: 11 May 2015 11:16:42am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -11,10 +11,11 @@
 #ifndef SHELFGAINPARAM_H_INCLUDED
 #define SHELFGAINPARAM_H_INCLUDED
 
+//==============================================================================
+
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "FloatParameter.h"
 #include "../Effects/VAStateVariableFilter.h"
-
 
 //==============================================================================
 

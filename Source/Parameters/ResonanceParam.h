@@ -3,13 +3,15 @@
 
 	ResonanceParam.h
 	Created: 11 May 2015 11:16:20am
-	Author:  Jordan
+	Author:  Jordan Harris
 
   ==============================================================================
 */
 
 #ifndef RESONANCEPARAM_H_INCLUDED
 #define RESONANCEPARAM_H_INCLUDED
+
+//==============================================================================
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "FloatParameter.h"
