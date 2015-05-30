@@ -27,7 +27,7 @@ VAStateVariableFilter::VAStateVariableFilter()
 	z1_A[0] = z2_A[0] = 0.0f;
 	z1_A[1] = z2_A[1] = 0.0f;
 
-	cutoffSmoother.setTimeMs(30);
+	smoothTimeMs = 0.0;		// 100 milliseconds
 }
 
 VAStateVariableFilter::~VAStateVariableFilter()
@@ -45,7 +45,7 @@ void VAStateVariableFilter::setCutoffPitch(const float& newCutoffPitch)
 {
 	if (active) {
 		cutoffFreq = pitchToFreq(newCutoffPitch);
-		cutoffSmoother.setValue(cutoffFreq);
+		cutoffLinSmooth.setValue(cutoffFreq);
 		calcFilter();
 	}
 }
@@ -94,8 +94,13 @@ void VAStateVariableFilter::setFilter(const int& newType, const float& newCutoff
 void VAStateVariableFilter::setSampleRate(const float& newSampleRate)
 {
 	sampleRate = newSampleRate;
-	cutoffSmoother.setSampleRate(sampleRate);
+	cutoffLinSmooth.reset(sampleRate, smoothTimeMs);
 	calcFilter();
+}
+
+void VAStateVariableFilter::setSmoothingTimeInMs(const float & newSmoothingTimeMs)
+{
+	smoothTimeMs = newSmoothingTimeMs;
 }
 
 void VAStateVariableFilter::setIsActive(bool isActive)
@@ -113,12 +118,14 @@ void VAStateVariableFilter::calcFilter()
 		float T = 1.0f / (float)sampleRate;
 		float wa = (2.0f / T) * tan(wd * T / 2.0f);
 
+		// Calculate g (gain element of integrator)
 		gCoeff = wa * T / 2.0f;			// Calculate g (gain element of integrator)
 
-		RCoeff = 1.0f / (2.0f * Q);		// Calculate Zavalishin's R from Q
-		// R is referred to as the damping parameter
-
-		KCoeff = shelfGain;				// Gain for BandShelving filter
+		// Calculate Zavalishin's R from Q (referred to as damping parameter)
+		RCoeff = 1.0f / (2.0f * Q);		
+		
+		// Gain for BandShelving filter
+		KCoeff = shelfGain;				
 	}
 }
 
@@ -126,6 +133,11 @@ float VAStateVariableFilter::processAudioSample(const float& input, const int& c
 {
 	if (active) {
 
+		// Do the cutoff parameter smoothing per sample.
+		cutoffFreq = cutoffLinSmooth.getNextValue();
+		calcFilter();
+
+		// Filter processing:
 		float HP = 0.0f;
 		HP = (input - (2.0f * RCoeff + gCoeff) * z1_A[channelIndex] - z2_A[channelIndex])
 			/ (1.0f + (2.0f * RCoeff * gCoeff) + gCoeff * gCoeff);
@@ -199,12 +211,11 @@ void VAStateVariableFilter::processAudioBlock(float* const samples,  const int& 
 		// Loop through the sample block and process it
 		for (int i = 0; i < numSamples; ++i) {
 			
-			// Do the cutoff parameter smoothing.
-			if (cutoffSmoother.shouldUpdate()) {
-				cutoffSmoother.processSmoother(cutoffFreq);
-				calcFilter();
-			}
-			
+			// Do the cutoff parameter smoothing per sample.
+			cutoffFreq = cutoffLinSmooth.getNextValue();
+			calcFilter();
+
+			// Filter processing:
 			const float input = samples[i];
 
 			float HP = 0.0f;

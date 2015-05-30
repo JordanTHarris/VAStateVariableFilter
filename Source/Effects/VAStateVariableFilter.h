@@ -38,7 +38,7 @@
 #include <cmath>
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../Utilities/DspUtilities.h"
-#include "../Utilities/ParameterSmoother.h"
+#include "../Utilities/LinearSmoothedValue.h"
 
 //==============================================================================
 
@@ -65,13 +65,6 @@ class VAStateVariableFilter {
 public:
 	/** Create and initialize the filter with default values defined in constructor. */
 	VAStateVariableFilter();
-
-	/**	Initialize the filter with specific (static) parameters. Useful for
-		using as a static filter; not modulating parameters.
-		Note: shelfGain should only be used if type is SVFBandShelving
-	*/
-	VAStateVariableFilter(const int& type, const float& cutoff, const float& resonance,
-						  const float& shelfGain);
 
 	//------------------------------------------------------------------------------
 
@@ -133,7 +126,14 @@ public:
 	void setSampleRate(const float& newSampleRate);
 
 	//------------------------------------------------------------------------------
-	/** Set's whether the filter will process data or not.
+	/**	Sets the time that it takes to interpolate between the previous value and
+		the current value. For this filter, the smoothing is only happening for
+		the filters cutoff frequency.
+	*/
+	void setSmoothingTimeInMs(const float& newSmoothingTimeMs);
+
+	//------------------------------------------------------------------------------
+	/** Sets whether the filter will process data or not.
 		- If (isActive = true) then the filter will process data
 		- If (isActive = false) then the filter will be bypassed
 	*/
@@ -160,12 +160,12 @@ public:
 
 	//------------------------------------------------------------------------------
 
-protected:
+private:
 	//==============================================================================
 	//	Calculate the coefficients for the filter based on parameters.
 	void calcFilter();
 
-	//	Parameters
+	//	Parameters:
 	int filterType;
 	float cutoffFreq;
 	float Q;
@@ -174,14 +174,16 @@ protected:
 	float sampleRate;
 	bool active = true;	// is the filter processing or not
 
-	//	Coefficients
+	//	Coefficients:
 	float gCoeff;		// gain element 
 	float RCoeff;		// feedback damping element
 	float KCoeff;		// shelf gain element
 
 	float z1_A[2], z2_A[2];		// state variables (z^-1)
 
-	ParameterSmoother cutoffSmoother;
+	// Parameter smoothers:
+	LinearSmoothedValue cutoffLinSmooth;
+	double smoothTimeMs;
 };
 
 //==============================================================================
