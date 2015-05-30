@@ -38,6 +38,7 @@
 
 # SQL Server Database file - VS
 *.sdf
+*.opensdf
 
 # Build/Debug Folders
 **/MacOSX/build
@@ -53,6 +54,8 @@
 **/VisualStudio2012/Release
 **/VisualStudio2013/Debug
 **/VisualStudio2013/Release
+**/VisualStudio2015/Debug
+**/VisualStudio2015/Release
 **/Android/bin
 **/Android/libs
 **/Android/gen
