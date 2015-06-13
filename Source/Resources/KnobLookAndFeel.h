@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-	KnobLookAndFeel.h
-	Created: 26 Apr 2015 6:18:25am
-	Author:  Jordan Harris
+    KnobLookAndFeel.h
+    Created: 26 Apr 2015 6:18:25am
+    Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -21,26 +21,26 @@
 class KnobLookAndFeel    : public LookAndFeel_V3
 {
 public:
-	KnobLookAndFeel();
-	virtual ~KnobLookAndFeel();
+    KnobLookAndFeel();
+    virtual ~KnobLookAndFeel();
 
-	virtual void drawRotarySlider(Graphics& g,
-									int x,
-									int y,
-									int width,
-									int height,
-									float sliderPosProportional,
-									float rotaryStartAngle,
-									float rotaryEndAngle,
-									Slider& slider);
+    virtual void drawRotarySlider(Graphics& g,
+                                    int x,
+                                    int y,
+                                    int width,
+                                    int height,
+                                    float sliderPosProportional,
+                                    float rotaryStartAngle,
+                                    float rotaryEndAngle,
+                                    Slider& slider);
 
 private:
-	Image verticalSliderKnob;
-	Image myStrip;
-	int singleImageWidth;
-	int singleImageHeight;
+    Image verticalSliderKnob;
+    Image myStrip;
+    int singleImageWidth;
+    int singleImageHeight;
 
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KnobLookAndFeel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KnobLookAndFeel)
 };
 
 

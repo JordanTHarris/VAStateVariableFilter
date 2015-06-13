@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-	ShelfGainParam.h
-	Created: 11 May 2015 11:16:42am
-	Author:  Jordan Harris
+    ShelfGainParam.h
+    Created: 11 May 2015 11:16:42am
+    Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -21,24 +21,24 @@
 
 class ShelfGainParam : public FloatParameter {
 public:
-	ShelfGainParam(VAStateVariableFilter& svfFilter,
-				   float defaultParamVal,
-				   const String& paramName)
-		: FloatParameter(defaultParamVal, paramName),
-		  stateVariableFilter{ svfFilter }
-	{
-	}
+    ShelfGainParam(VAStateVariableFilter& svfFilter,
+                   float defaultParamVal,
+                   const String& paramName)
+        : FloatParameter(defaultParamVal, paramName),
+          stateVariableFilter{ svfFilter }
+    {
+    }
 
-	void setValue(float newValue) override
-	{
-		// call the base class
-		FloatParameter::setValue(newValue);
+    void setValue(float newValue) override
+    {
+        // call the base class
+        FloatParameter::setValue(newValue);
 
-		stateVariableFilter.setShelfGain(newValue);
-	}
+        stateVariableFilter.setShelfGain(newValue);
+    }
 
 private:
-	VAStateVariableFilter& stateVariableFilter;
+    VAStateVariableFilter& stateVariableFilter;
 };
 
 //==============================================================================

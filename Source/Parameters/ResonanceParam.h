@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-	ResonanceParam.h
-	Created: 11 May 2015 11:16:20am
-	Author:  Jordan Harris
+    ResonanceParam.h
+    Created: 11 May 2015 11:16:20am
+    Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -21,24 +21,24 @@
 
 class ResonanceParam : public FloatParameter {
 public:
-	ResonanceParam(VAStateVariableFilter& svfFilter,
-				   float defaultParamVal,
-				   const String& paramName)
-		: FloatParameter(defaultParamVal, paramName),
-		  stateVariableFilter{ svfFilter }
-	{
-	}
+    ResonanceParam(VAStateVariableFilter& svfFilter,
+                   float defaultParamVal,
+                   const String& paramName)
+        : FloatParameter(defaultParamVal, paramName),
+          stateVariableFilter{ svfFilter }
+    {
+    }
 
-	void setValue(float newValue) override
-	{
-		// call the base class
-		FloatParameter::setValue(newValue);
+    void setValue(float newValue) override
+    {
+        // call the base class
+        FloatParameter::setValue(newValue);
 
-		stateVariableFilter.setResonance(newValue);
-	}
+        stateVariableFilter.setResonance(newValue);
+    }
 
 private:
-	VAStateVariableFilter& stateVariableFilter;
+    VAStateVariableFilter& stateVariableFilter;
 };
 
 //==============================================================================

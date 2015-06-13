@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-	FloatParameter.cpp
-	Created: 2 May 2015 4:07:55am
-	Author:  Jordan Harris
+    FloatParameter.cpp
+    Created: 2 May 2015 4:07:55am
+    Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -18,41 +18,41 @@
 //==============================================================================
 
 FloatParameter::FloatParameter(float defaultParameterValue, const String& paramName)
-	: defaultValue{ defaultParameterValue },
-	  value{ defaultParameterValue },
-	  name{ paramName }
+    : defaultValue{ defaultParameterValue },
+      value{ defaultParameterValue },
+      name{ paramName }
 {
 }
 
 
 float FloatParameter::getValue() const
 {
-	return value;
+    return value;
 }
 
 void FloatParameter::setValue(float newValue)
 {
-	value = newValue;
+    value = newValue;
 }
 
 float FloatParameter::getDefaultValue() const
 {
-	return defaultValue;
+    return defaultValue;
 }
 
 String FloatParameter::getName(int maximumStringLength) const
 {
-	return name;
+    return name;
 }
 
 String FloatParameter::getLabel() const
 {
-	return String();	// use to return label for parameter's unit (Hz, dB, etc.)
+    return String();	// use to return label for parameter's unit (Hz, dB, etc.)
 }
 
 float FloatParameter::getValueForText(const String& text) const
 {
-	return text.getFloatValue();
+    return text.getFloatValue();
 }
 
 //==============================================================================

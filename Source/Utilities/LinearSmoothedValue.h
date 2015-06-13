@@ -18,55 +18,55 @@
 //==============================================================================
 class LinearSmoothedValue {
 public:
-	LinearSmoothedValue() noexcept
-		: currentValue{ 0 }, target{ 0 }, step{ 0 }, countdown{ 0 }, stepsToTarget{ 0 }
-	{
-	}
+    LinearSmoothedValue() noexcept
+        : currentValue{ 0 }, target{ 0 }, step{ 0 }, countdown{ 0 }, stepsToTarget{ 0 }
+    {
+    }
 
-	//------------------------------------------------------------------------------
-	void reset(double sampleRate, double fadeLengthMs) noexcept
-	{
-		const double fadeLengthSeconds = fadeLengthMs * 0.001;
+    //------------------------------------------------------------------------------
+    void reset(double sampleRate, double fadeLengthMs) noexcept
+    {
+        const double fadeLengthSeconds = fadeLengthMs * 0.001;
 
-		jassert(sampleRate > 0 && fadeLengthSeconds >= 0);
-		stepsToTarget = (int)std::floor(fadeLengthSeconds * sampleRate);
-		currentValue = target;
-		countdown = 0;
-	}
+        jassert(sampleRate > 0 && fadeLengthSeconds >= 0);
+        stepsToTarget = (int)std::floor(fadeLengthSeconds * sampleRate);
+        currentValue = target;
+        countdown = 0;
+    }
 
-	//------------------------------------------------------------------------------
-	void setValue(float newValue) noexcept
-	{
-		if (target != newValue) {
-			target = newValue;
-			countdown = stepsToTarget;
+    //------------------------------------------------------------------------------
+    void setValue(float newValue) noexcept
+    {
+        if (target != newValue) {
+            target = newValue;
+            countdown = stepsToTarget;
 
-			if (countdown <= 0)
-				currentValue = target;
-			else
-				step = (target - currentValue) / (float)countdown;
-		}
-	}
+            if (countdown <= 0)
+                currentValue = target;
+            else
+                step = (target - currentValue) / (float)countdown;
+        }
+    }
 
-	//------------------------------------------------------------------------------
-	float getNextValue() noexcept
-	{
-		if (countdown <= 0)
-			return target;
+    //------------------------------------------------------------------------------
+    float getNextValue() noexcept
+    {
+        if (countdown <= 0)
+            return target;
 
-		--countdown;
-		currentValue += step;
-		return currentValue;
-	}
+        --countdown;
+        currentValue += step;
+        return currentValue;
+    }
 
-	//------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
 
 private:
-	//==============================================================================
-	float currentValue, target, step;
-	int countdown, stepsToTarget;
+    //==============================================================================
+    float currentValue, target, step;
+    int countdown, stepsToTarget;
 
-	JUCE_DECLARE_NON_COPYABLE(LinearSmoothedValue)
+    JUCE_DECLARE_NON_COPYABLE(LinearSmoothedValue)
 };
 
 //==============================================================================

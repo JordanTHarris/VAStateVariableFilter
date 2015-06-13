@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-	FloatParameter.h
-	Created: 2 May 2015 4:07:55am
-	Author:  Jordan Harris
+    FloatParameter.h
+    Created: 2 May 2015 4:07:55am
+    Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -22,18 +22,18 @@
 
 class FloatParameter : public AudioProcessorParameter {
 public:
-	FloatParameter(float defaultParameterValue, const String& paramName);
-	float getValue() const override;
-	void setValue(float newValue) override;
-	float getDefaultValue() const override;
-	String getName(int maximumStringLength) const override;
-	String getLabel() const override;
-	float getValueForText(const String& text) const override;
+    FloatParameter(float defaultParameterValue, const String& paramName);
+    float getValue() const override;
+    void setValue(float newValue) override;
+    float getDefaultValue() const override;
+    String getName(int maximumStringLength) const override;
+    String getLabel() const override;
+    float getValueForText(const String& text) const override;
 
 private:
-	float defaultValue, value;
-	String name;
-	int index;			// index to check which parameter is used.
+    float defaultValue, value;
+    String name;
+    int index;			// index to check which parameter is used.
 };
 
 //==============================================================================

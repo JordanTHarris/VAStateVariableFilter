@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-	FilterTypeParam.h
-	Created: 11 May 2015 11:17:15am
-	Author:  Jordan Harris
+    FilterTypeParam.h
+    Created: 11 May 2015 11:17:15am
+    Author:  Jordan Harris
 
   ==============================================================================
 */
@@ -21,24 +21,24 @@
 
 class FilterTypeParam : public FloatParameter {
 public:
-	FilterTypeParam(VAStateVariableFilter& svfFilter,
-					float defaultParamVal,
-					const String& paramName)
-		: FloatParameter(defaultParamVal, paramName),
-		  stateVariableFilter{ svfFilter }
-	{
-	}
+    FilterTypeParam(VAStateVariableFilter& svfFilter,
+                    float defaultParamVal,
+                    const String& paramName)
+        : FloatParameter(defaultParamVal, paramName),
+          stateVariableFilter{ svfFilter }
+    {
+    }
 
-	void setValue(float newValue) override
-	{
-		// call the base class
-		FloatParameter::setValue(newValue);
+    void setValue(float newValue) override
+    {
+        // call the base class
+        FloatParameter::setValue(newValue);
 
-		stateVariableFilter.setFilterType(newValue);
-	}
+        stateVariableFilter.setFilterType(newValue);
+    }
 
 private:
-	VAStateVariableFilter& stateVariableFilter;
+    VAStateVariableFilter& stateVariableFilter;
 };
 
 //==============================================================================
