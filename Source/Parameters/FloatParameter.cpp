@@ -42,7 +42,7 @@ float FloatParameter::getDefaultValue() const
 
 String FloatParameter::getName(int maximumStringLength) const
 {
-    return name;
+    return name.substring(0, maximumStringLength);
 }
 
 String FloatParameter::getLabel() const

@@ -46,6 +46,11 @@ const String VAStateVariableFilterProcessor::getOutputChannelName (int channelIn
     return String (channelIndex + 1);
 }
 
+#if (_MSC_VER)         // Check MSC version
+#pragma warning(push)
+#pragma warning(disable: 4100) // Disable unreferenced parameter
+#endif
+
 bool VAStateVariableFilterProcessor::isInputChannelStereoPair (int index) const
 {
     return true;
@@ -55,6 +60,10 @@ bool VAStateVariableFilterProcessor::isOutputChannelStereoPair (int index) const
 {
     return true;
 }
+
+#if (_MSC_VER)         // Check MSC version
+#pragma warning(pop)           // Re-enable previous disabled warning
+#endif
 
 bool VAStateVariableFilterProcessor::acceptsMidi() const
 {
@@ -85,27 +94,31 @@ double VAStateVariableFilterProcessor::getTailLengthSeconds() const
 }
 
 //==============================================================================
-void VAStateVariableFilterProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+#if (_MSC_VER)                  // Check if Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4100)  // disable warning
+#endif
+
+void VAStateVariableFilterProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-    svfFilter.setSampleRate(sampleRate);
+    // initialization that you need..
+    svfFilter.setSampleRate(static_cast<float>(sampleRate));
 }
 
 void VAStateVariableFilterProcessor::releaseResources()
 {
 }
 
-void VAStateVariableFilterProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void VAStateVariableFilterProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     const int numSamples = buffer.getNumSamples();
-    int channel = 0;
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     for (int channel = 0; channel < getNumInputChannels(); ++channel) {
 
-        float* channelData = buffer.getWritePointer (channel);
+        float* channelData = buffer.getWritePointer(channel);
 
         // Process audio sample block through filter
         svfFilter.processAudioBlock(channelData, numSamples, channel);
@@ -115,8 +128,12 @@ void VAStateVariableFilterProcessor::processBlock (AudioSampleBuffer& buffer, Mi
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
 }
+
+#if (_MSC_VER)                  // Check if Visual Studio
+#pragma warning(pop)            // Re-enable previous disabled warning
+#endif
 
 //==============================================================================
 AudioProcessorEditor* VAStateVariableFilterProcessor::createEditor()
@@ -159,10 +176,10 @@ void VAStateVariableFilterProcessor::setStateInformation (const void* data, int 
             // ok, now pull out our parameters..
             lastUIWidth = xmlState->getIntAttribute("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute("uiHeight", lastUIHeight);
-            filterType->setValue(xmlState->getDoubleAttribute("filterType", filterType->getValue()));
-            cutoff->setValue(xmlState->getDoubleAttribute("cutoff", cutoff->getValue()));
-            resonance->setValue(xmlState->getDoubleAttribute("resonance", resonance->getValue()));
-            shelfGain->setValue(xmlState->getDoubleAttribute("shelfGain", shelfGain->getValue()));
+            filterType->setValue((float)xmlState->getDoubleAttribute("filterType", filterType->getValue()));
+            cutoff->setValue((float)xmlState->getDoubleAttribute("cutoff", cutoff->getValue()));
+            resonance->setValue((float)xmlState->getDoubleAttribute("resonance", resonance->getValue()));
+            shelfGain->setValue((float)xmlState->getDoubleAttribute("shelfGain", shelfGain->getValue()));
         }
     }
 }

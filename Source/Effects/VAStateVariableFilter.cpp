@@ -22,7 +22,7 @@ VAStateVariableFilter::VAStateVariableFilter()
     KCoeff = 0.0f;
 
     cutoffFreq = 1000.0f;
-    Q = resonanceToQ(0.5);
+    Q = static_cast<float>(resonanceToQ(0.5));
 
     z1_A[0] = z2_A[0] = 0.0f;
     z1_A[1] = z2_A[1] = 0.0f;
@@ -44,7 +44,7 @@ void VAStateVariableFilter::setFilterType(const int& newType)
 void VAStateVariableFilter::setCutoffPitch(const float& newCutoffPitch)
 {
     if (active) {
-        cutoffFreq = pitchToFreq(newCutoffPitch);
+        cutoffFreq = static_cast<float>(pitchToFreq(newCutoffPitch));
         //cutoffLinSmooth.setValue(cutoffFreq);
         calcFilter();
     }
@@ -61,7 +61,7 @@ void VAStateVariableFilter::setCutoffFreq(const float& newCutoffFreq)
 void VAStateVariableFilter::setResonance(const float& newResonance)
 {
     if (active) {
-        Q = resonanceToQ(newResonance);
+        Q = static_cast<float>(resonanceToQ(newResonance));
         calcFilter();
     }
 }
@@ -87,7 +87,8 @@ void VAStateVariableFilter::setFilter(const int& newType, const float& newCutoff
 {
     filterType = newType;
     cutoffFreq = newCutoffFreq;
-    Q = resonanceToQ(newResonance);
+    Q = static_cast<float>(resonanceToQ(newResonance));
+    shelfGain = newShelfGain;
     calcFilter();
 }
 
@@ -114,7 +115,7 @@ void VAStateVariableFilter::calcFilter()
     if (active) {
 
         // prewarp the cutoff (for bilinear-transform filters)
-        float wd = cutoffFreq * 2.0f * M_PI;
+        float wd = static_cast<float>(cutoffFreq * 2.0f * M_PI);
         float T = 1.0f / (float)sampleRate;
         float wa = (2.0f / T) * tan(wd * T / 2.0f);
 
@@ -205,7 +206,7 @@ void VAStateVariableFilter::processAudioBlock(float* const samples,  const int& 
             
             // Do the cutoff parameter smoothing per sample.
             //cutoffFreq = cutoffLinSmooth.getNextValue();
-            calcFilter();
+            //calcFilter();       // calculate the coefficients for the smoother
 
             // Filter processing:
             const float input = samples[i];

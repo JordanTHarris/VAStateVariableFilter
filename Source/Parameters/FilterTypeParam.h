@@ -34,7 +34,7 @@ public:
         // call the base class
         FloatParameter::setValue(newValue);
 
-        stateVariableFilter.setFilterType(newValue);
+        stateVariableFilter.setFilterType(static_cast<int>(newValue));
     }
 
 private:

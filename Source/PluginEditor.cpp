@@ -166,7 +166,7 @@ void VAStateVariableFilterProcessorEditor::timerCallback()
     resonanceSlider->setValue(ourProcessor.resonance->getValue(), dontSendNotification);
     shelfGainSlider->setValue(ourProcessor.shelfGain->getValue(), dontSendNotification);
 
-    filterTypeCBox->setSelectedItemIndex(ourProcessor.filterType->getValue(), dontSendNotification);
+    filterTypeCBox->setSelectedItemIndex((int)ourProcessor.filterType->getValue(), dontSendNotification);
 
     // Note: convert pitch to frequency to display on the label
     cutoffVal->setText(String(pitchToFreq(ourProcessor.cutoff->getValue())) + " Hz", dontSendNotification);
