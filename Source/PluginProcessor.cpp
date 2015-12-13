@@ -46,11 +46,6 @@ const String VAStateVariableFilterProcessor::getOutputChannelName (int channelIn
     return String (channelIndex + 1);
 }
 
-#if (_MSC_VER)         // Check MSC version
-#pragma warning(push)
-#pragma warning(disable: 4100) // Disable unreferenced parameter
-#endif
-
 bool VAStateVariableFilterProcessor::isInputChannelStereoPair (int index) const
 {
     return true;
@@ -60,10 +55,6 @@ bool VAStateVariableFilterProcessor::isOutputChannelStereoPair (int index) const
 {
     return true;
 }
-
-#if (_MSC_VER)         // Check MSC version
-#pragma warning(pop)           // Re-enable previous disabled warning
-#endif
 
 bool VAStateVariableFilterProcessor::acceptsMidi() const
 {
@@ -94,10 +85,6 @@ double VAStateVariableFilterProcessor::getTailLengthSeconds() const
 }
 
 //==============================================================================
-#if (_MSC_VER)                  // Check if Visual Studio
-#pragma warning(push)
-#pragma warning(disable: 4100)  // disable warning
-#endif
 
 void VAStateVariableFilterProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
@@ -130,10 +117,6 @@ void VAStateVariableFilterProcessor::processBlock(AudioSampleBuffer& buffer, Mid
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 }
-
-#if (_MSC_VER)                  // Check if Visual Studio
-#pragma warning(pop)            // Re-enable previous disabled warning
-#endif
 
 //==============================================================================
 AudioProcessorEditor* VAStateVariableFilterProcessor::createEditor()
