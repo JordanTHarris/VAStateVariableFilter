@@ -57,18 +57,9 @@ public:
     int getNumPrograms() override										{ return 1; }
     int getCurrentProgram() override									{ return 0; }
 
-#if (_MSC_VER)                  // Check if Visual Studio
-#pragma warning(push)
-#pragma warning(disable: 4100)  // disable warning
-#endif
-
     void setCurrentProgram(int index) override {}
     const String getProgramName(int index) override { return "Default"; }
     void changeProgramName(int index, const String& newName) override {}
-
-#if (_MSC_VER)                  // Check if Visual Studio
-#pragma warning(pop)            // Re-enable previous disabled warning
-#endif
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
