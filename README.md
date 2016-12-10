@@ -1,5 +1,7 @@
 # VAStateVariableFilter
 
+To use this filter, check out [this fork](https://github.com/michaeldonovan/VAStateVariableFilter) from [michaeldonovan](https://github.com/michaeldonovan).
+
 #### Analog Circuit Diagram
 ![Analog Diagram](https://cloud.githubusercontent.com/assets/11206202/7587209/aa5c434a-f882-11e4-9e90-2220cf9cf514.png)
 
